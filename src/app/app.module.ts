@@ -6,15 +6,18 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {FirebaseTSApp} from 'firebasets/firebasetsApp/firebaseTSApp';
 import { environment } from 'src/environments/environment';
-
+import {MatButtonModule} from '@angular/material/button';
+import { HomeComponent } from './pages/home/home.component';
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
