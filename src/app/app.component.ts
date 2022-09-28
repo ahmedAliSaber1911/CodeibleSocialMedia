@@ -44,7 +44,9 @@ export class AppComponent {
       onUpdate : (res)=>{
         this.userDocument = <UserDocument>res.data();
         this.userHasProfile = res.exists;
-
+        if(this.userHasProfile){
+          this.router.navigateByUrl('postFeed');
+        }
       }
     })
   }
