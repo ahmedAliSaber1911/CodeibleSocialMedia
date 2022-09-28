@@ -1,5 +1,8 @@
 <nav>
   <div>Codeible</div>
-  <div id="Login">Login</div>
+  <div>
+    <div id="login" *ngIf="!isLogin()" (click)="onLoginClick()">Login</div>
+    <div id="logout"*ngIf="isLogin()" (click)="onLogoutClick()">Logout</div>
+  </div>
 </nav>
 <router-outlet></router-outlet>
