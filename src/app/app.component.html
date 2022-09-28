@@ -1,8 +1,10 @@
 <nav>
   <div>Codeible</div>
-  <div>
+  <div class="navRight">
     <div id="login" *ngIf="!isLogin()" (click)="onLoginClick()">Login</div>
+    <div id="hello" *ngIf="isLogin() && userHasProfile" >Hello {{userDocument.puplicName }}</div>
     <div id="logout"*ngIf="isLogin()" (click)="onLogoutClick()">Logout</div>
   </div>
 </nav>
 <router-outlet></router-outlet>
+<app-profile [show]="isLogin() && !userHasProfile"></app-profile>

@@ -15,3 +15,10 @@ nav{
 #login:hover ,#logout:hover  {
   cursor: pointer;
 }
+.navRight{
+  display: flex;
+}
+#hello{
+  margin-right: 1em;
+  text-transform: capitalize;
+}
