@@ -1,4 +1,10 @@
+import { FirebaseTSApp } from 'firebasets/firebasetsApp/firebaseTSApp';
+import { FirebaseTSFirestore } from 'firebasets/firebasetsFirestore/firebaseTSFirestore';
+import { FirebaseTSAuth } from 'firebasets/firebasetsAuth/firebaseTSAuth';
+import { FirebaseTSStorage } from 'firebasets/firebasetsStorage/firebaseTSStorage';
+
 import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-create-post',
@@ -7,7 +13,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreatePostComponent implements OnInit {
   SelectedphotoFile:any ;
-  constructor() { }
+  auth = new FirebaseTSAuth();
+  fireStore = new FirebaseTSFirestore();
+  storage = new FirebaseTSStorage();
+
+
+  constructor(private dialog : MatDialogRef<CreatePostComponent>) { }
 
   ngOnInit(): void {
   }
@@ -25,4 +36,50 @@ export class CreatePostComponent implements OnInit {
       }
     )
   }
+  uploadImagePost(comment : string){
+    let postId = this.fireStore.genDocId();
+    this.storage.upload({
+      uploadName:"Upload Image Post",
+      path : ["Posts", postId, "image"],
+      data:{
+        data : this.SelectedphotoFile
+      },
+      onComplete:(downloadUrl)=>{
+        this.fireStore.create({
+          path:["Posts",postId],
+          data:{
+            comment: comment,
+            cratorId: this.auth.getAuth().currentUser?.uid,
+            imageUrl: downloadUrl,
+            timetamp: FirebaseTSApp.getFirestoreTimestamp()
+          },
+          onComplete : (docId) =>{
+            this.dialog.close();
+          }
+        })
+      }
+    })
+  }
+  uploadPost(comment : string){
+    this.fireStore.create({
+      path:["Posts"],
+      data:{
+        comment: comment,
+        cratorId: this.auth.getAuth().currentUser?.uid,
+        timetamp: FirebaseTSApp.getFirestoreTimestamp()
+      },
+      onComplete : (docId) =>{
+        this.dialog.close();
+      }
+    })
+  }
+  onPostClick(commentInput : HTMLTextAreaElement){
+    let comment = commentInput.value;
+    if(comment.length <= 0 ) return;
+    if(this.SelectedphotoFile)
+    this.uploadImagePost(comment);
+    else
+    this.uploadPost(comment)
+  }
+
 }
